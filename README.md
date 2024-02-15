@@ -96,7 +96,7 @@ docker run -d --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:management
 
 
 
-## Setting Up RabbitMQ Fanout Exchange
+### Setting Up RabbitMQ Fanout Exchange
 
 To create a RabbitMQ fanout exchange and bind it to a queue, run the provided PowerShell script. Ensure you have the RabbitMQ Management Plugin enabled.
 
