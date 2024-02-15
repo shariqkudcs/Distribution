@@ -96,59 +96,14 @@ If you're running RabbitMQ as a Docker container, enable the Management Console 
     ```
 
 
+## Setting up RabbitMQ Exchange and Queue
 
-### Setting Up RabbitMQ Fanout Exchange
+To create a RabbitMQ fanout exchange named 'exchange' and bind it to a queue named 'myqueue', follow these steps:
 
-To create a RabbitMQ fanout exchange and bind it to a queue, run the provided PowerShell script. Ensure you have the RabbitMQ Management Plugin enabled.
+1. Ensure that you have a RabbitMQ server running locally or update the connection information in the PowerShell script accordingly.
 
-# RabbitMQ server details
-$rmqUrl = "http://localhost:15672" # Change the URL if your RabbitMQ server is running on a different host or port
-$rmqUser = "guest"
-$rmqPassword = "guest"
+2. Run the PowerShell script `CreateRabbitMQExchange.ps1`:
 
-# Exchange and Queue details
-$exchangeName = "exchange"
-$queueName = "myqueue"
-$bindingKey = "" # Fanout exchanges ignore routing keys, so it can be an empty string
-
-# Base64 encoding for authentication
-$base64AuthInfo = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes(("${rmqUser}:${rmqPassword}")))
-
-# Function to create a RabbitMQ fanout exchange
-function CreateFanoutExchange {
-    param (
-        [string]$exchangeName
-    )
-
-    $exchangeConfig = @{
-        type = "fanout"
-        auto_delete = $false
-        durable = $true
-    }
-
-    $exchangeUri = "$rmqUrl/api/exchanges/%2F/$exchangeName"
-    Invoke-RestMethod -Uri $exchangeUri -Method PUT -Headers @{ Authorization = "Basic $base64AuthInfo" } -Body ($exchangeConfig | ConvertTo-Json) -ContentType 'application/json'
-}
-
-# Function to bind a queue to a fanout exchange
-function BindQueueToExchange {
-    param (
-        [string]$exchangeName,
-        [string]$queueName,
-        [string]$bindingKey
-    )
-
-    $bindingConfig = @{
-        routing_key = $bindingKey
-    }
-
-    $bindingUri = "$rmqUrl/api/bindings/%2F/e/$exchangeName/q/$queueName"
-    Invoke-RestMethod -Uri $bindingUri -Method POST -Headers @{ Authorization = "Basic $base64AuthInfo" } -Body ($bindingConfig | ConvertTo-Json) -ContentType 'application/json'
-}
-
-# Main execution
-CreateFanoutExchange -exchangeName $exchangeName
-BindQueueToExchange -exchangeName $exchangeName -queueName $queueName -bindingKey $bindingKey
-
-Write-Host "Fanout exchange '$exchangeName' created and bound to queue '$queueName'."
+   ```powershell
+   .\CreateRabbitMQExchange.ps1
 
