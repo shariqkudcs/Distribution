@@ -2,7 +2,7 @@
 
 ## Overview
 
-This project consists of an Angular application and a .NET Core server, both utilizing RabbitMQ for messaging. The Angular application is built with version 16.1.2.
+This project consists of an Angular application and a .NET Core server, server is utilizing RabbitMQ for messaging, while Angular application is utilizing SignalR. The Angular application is built with version 16.1.2.
 
 ## Prerequisites
 
