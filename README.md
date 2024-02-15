@@ -91,8 +91,9 @@ To enable the RabbitMQ Management Console for monitoring and managing your Rabbi
 
 If you're running RabbitMQ as a Docker container, enable the Management Console during container creation:
 
-```bash
-docker run -d --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:management
+    ```bash
+    docker run -d --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:management
+    ```
 
 
 
