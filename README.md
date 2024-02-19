@@ -4,6 +4,9 @@
 
 This project consists of an Angular application and a .NET Core server, server is utilizing RabbitMQ for messaging, while Angular application is utilizing SignalR. The Angular application is built with version 16.1.2.
 
+
+![Example Image](Schema.png)
+
 ## Prerequisites
 
 Before running the project, ensure you have the following prerequisites installed on your machine:
@@ -11,11 +14,13 @@ Before running the project, ensure you have the following prerequisites installe
 - Node.js and npm (for Angular)
 - .NET Core SDK
 - RabbitMQ Server
+- SQL Server Server
 
 ## Project Structure
 
 - `distinv` folder: Angular application
 - `Server` folder: .NET Core server
+- `DatabaseScript\script.zip` Initialization script for SQL Server
 
 ## Running the Angular Application
 

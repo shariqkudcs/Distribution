@@ -22,7 +22,7 @@ export class SignalRService {
 
   public addInventoryDataListener = () => {
     this.hubConnection.on('inventorydata', (data) => {
-      this.data.push(data);
+        this.data.push(data);
       console.log(data);
     })
   }

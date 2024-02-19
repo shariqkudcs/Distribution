@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using Newtonsoft.Json;
 using Server.HubConfig;
 using Server.Models;
 using Server.Services;
@@ -31,10 +32,26 @@ namespace Server.Controllers
         /// <param name="product"></param>
         /// <returns></returns>
         [HttpPost]
-        public IActionResult Post([FromBody] Product product)
+        public async Task<IActionResult> Post([FromBody] Product product)
         {
-            _mQHandler.AddProductToInventory(JsonSerializer.Serialize(product));
-            return Ok();
+            try
+            {
+                _logger.LogInformation($"Received POST request to add product to inventory. Request details: {JsonConvert.SerializeObject(product)}");
+
+                _logger.LogInformation($"Adding product to inventory: {JsonConvert.SerializeObject(product)}");
+
+                await _mQHandler.AddProductToInventoryAsync(JsonConvert.SerializeObject(product));
+
+                _logger.LogInformation($"Product queued to add into inventory successfully.");
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error occurred while processing POST request: {ex}");
+
+                throw;
+            }
         }
 
 
@@ -43,10 +60,24 @@ namespace Server.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public IActionResult Get()
+        public Task<IActionResult> Get()
         {
-            //read data from entity framework
-            return Ok(new Product[] { new Product { Description = "Product One", Name = "One" } });
+            try
+            {
+                _logger.LogInformation("Received GET request to retrieve products.");
+
+                var products = new Product[] { new Product { Description = "Product One", Name = "One" } };
+
+                _logger.LogInformation($"Returning products: {JsonConvert.SerializeObject(products)}");
+
+                return Task.FromResult<IActionResult>(Ok(products));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error occurred while processing GET request: {ex}");
+
+                throw;
+            }
         }
     }
 }

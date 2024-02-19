@@ -8,30 +8,40 @@ namespace Server.Services
     public class MessageListenerService : IMessageListener, IDisposable
     {
         private Timer? _timer;
-        private AutoResetEvent? _autoResetEvent;
         private readonly IHubContext<InventoryHub> _hub;
         private readonly IRabbitMQHandler _rabbitMQHandler;
-        public MessageListenerService(IRabbitMQHandler handler, IHubContext<InventoryHub> hub)
+        private readonly CancellationTokenSource _cancellationTokenSource;
+        private readonly ILogger<RabbitMQHandler> _logger;
+
+        public MessageListenerService(IRabbitMQHandler handler, IHubContext<InventoryHub> hub, ILogger<RabbitMQHandler> logger)
         {
-            _rabbitMQHandler = handler;
-            _hub = hub;
-            _autoResetEvent = new AutoResetEvent(false);
-            _timer = new Timer((object? stateInfo) =>
+            _rabbitMQHandler = handler ?? throw new ArgumentNullException(nameof(handler));
+            _hub = hub ?? throw new ArgumentNullException(nameof(hub));
+
+            _cancellationTokenSource = new CancellationTokenSource();
+
+            _timer = new Timer(async (object? stateInfo) =>
             {
-                var rcv = _rabbitMQHandler.GetItemFromInventory();
-                if (!string.IsNullOrEmpty(rcv))
+                try
                 {
-                    _hub.Clients.All.SendAsync("inventorydata", JsonSerializer.Deserialize<Product>(rcv));
+                    var rcv = await _rabbitMQHandler.GetItemFromInventoryAsync();
+                    if (!string.IsNullOrEmpty(rcv))
+                    {
+                        await _hub.Clients.All.SendAsync("inventorydata", JsonSerializer.Deserialize<Product>(rcv));
+                    }
                 }
-            }, _autoResetEvent, 1000, 2000);
+                catch (Exception ex)
+                {
+                    logger.LogError($"Error in timer callback: {ex}");
+                }
+            }, null, 1000, 2000);
+            _logger = logger;
         }
 
         public void Dispose()
         {
-            if (_timer != null)
-            { 
-                _timer.Dispose(); 
-            }
+            _cancellationTokenSource.Cancel();
+            _timer?.Dispose();
         }
     }
 }
