@@ -1,5 +1,9 @@
+using Microsoft.EntityFrameworkCore;
+using Server.Data;
 using Server.HubConfig;
 using Server.Services;
+using System.Reflection;
+using System.Text.Json.Serialization;
 
 namespace Server
 {
@@ -20,14 +24,33 @@ namespace Server
                 .AllowCredentials());
             });
 
+            builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
+
             builder.Services.AddSignalR();
-            builder.Services.AddControllers();
+
+            builder.Services.AddControllers().AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+                options.JsonSerializerOptions.WriteIndented = true;
+            });
+
             builder.Services.AddSingleton<IRabbitMQHandler, RabbitMQHandler>();
             builder.Services.AddSingleton<IMessageListener, MessageListenerService>();
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            /*builder.Services.AddSwaggerGen(c =>
+            {
+                var xmlFile = Assembly.GetExecutingAssembly().GetName().Name + ".xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
+            });*/
+
+            builder.Services.AddDbContext<DistributionContext>(options =>
+                        options.UseLazyLoadingProxies()
+                        .UseSqlServer(builder.Configuration.GetConnectionString("Distribution")));
+
 
             var app = builder.Build();
 

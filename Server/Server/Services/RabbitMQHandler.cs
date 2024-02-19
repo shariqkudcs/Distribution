@@ -7,8 +7,9 @@ namespace Server.Services
     {
         private readonly IConnection _rabbitMqConnection;
         private readonly IModel _rabbitMqChannel;
+        private readonly ILogger<RabbitMQHandler> _logger;
 
-        public RabbitMQHandler()
+        public RabbitMQHandler(ILogger<RabbitMQHandler> logger)
         {
             ConnectionFactory connectionFactory = new ConnectionFactory()
             {
@@ -19,30 +20,41 @@ namespace Server.Services
 
             _rabbitMqConnection = connectionFactory.CreateConnection();
             _rabbitMqChannel = _rabbitMqConnection.CreateModel();
+            _logger = logger;
         }
 
-        public string? GetItemFromInventory()
+        public async Task<string?> GetItemFromInventoryAsync()
         {
-            var ea = _rabbitMqChannel.BasicGet(queue: "myqueue", autoAck: true);
-            if (ea == null)
+            try
             {
+                var ea = _rabbitMqChannel.BasicGet(queue: "myqueue", autoAck: true);
+                return ea != null ? Encoding.UTF8.GetString(ea.Body.ToArray()) : null;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error in GetItemFromInventory: {ex}");
                 return null;
             }
-            return Encoding.UTF8.GetString(ea.Body.ToArray());
         }
 
-        public void AddProductToInventory(string product)
+        public async Task AddProductToInventoryAsync(string product)
         {
-            var properties = _rabbitMqChannel.CreateBasicProperties();
-            properties.Persistent = true;
-            _rabbitMqChannel.BasicPublish("exchange", "", properties, Encoding.UTF8.GetBytes(product));
+            try
+            {
+                var properties = _rabbitMqChannel.CreateBasicProperties();
+                properties.Persistent = true;
+                _rabbitMqChannel.BasicPublish("exchange", "", properties, Encoding.UTF8.GetBytes(product));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error in AddProductToInventory: {ex}");
+            }
         }
-
 
         public void Dispose()
         {
-            _rabbitMqChannel.Close();
-            _rabbitMqConnection.Close();
+            _rabbitMqChannel?.Close();
+            _rabbitMqConnection?.Close();
         }
     }
 }
