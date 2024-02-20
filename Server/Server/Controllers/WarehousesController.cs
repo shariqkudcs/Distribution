@@ -40,7 +40,7 @@ namespace Server.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError("Unexpected error occurred while retrieving warehouses.", ex);
+                _logger.LogError("Unexpected error occurred while retrieving warehouses.{0}", ex);
                 throw;
             }
         }
@@ -105,14 +105,14 @@ namespace Server.Controllers
                     }
                     else
                     {
-                        _logger.LogError("Unexpected error occurred during warehouse update.", ex);
+                        _logger.LogError("Unexpected error occurred during warehouse update.{0}", ex);
                         throw;
                     }
                 }
             }
             catch (Exception ex)
             {
-                _logger.LogError("Unexpected error occurred during warehouse update.", ex);
+                _logger.LogError("Unexpected error occurred during warehouse update.{0}", ex);
                 throw;
             }
         }
@@ -138,7 +138,7 @@ namespace Server.Controllers
                 }
                 else
                 {
-                    _logger.LogError("Unexpected error occurred during warehouse creation.", ex);
+                    _logger.LogError("Unexpected error occurred during warehouse creation.{0}", ex);
                     throw;
                 }
             }
@@ -170,7 +170,7 @@ namespace Server.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError("Unexpected error occurred during warehouse deletion.", ex);
+                _logger.LogError("Unexpected error occurred during warehouse deletion.{0}", ex);
                 throw;
             }
         }

@@ -83,14 +83,14 @@ namespace Server.Controllers
                     }
                     else
                     {
-                        _logger.LogError("Unexpected error occurred during item update.", ex);
+                        _logger.LogError("Unexpected error occurred during item update.{0}", ex);
                         throw;
                     }
                 }
             }
             catch (Exception ex)
             {
-                _logger.LogError("Unexpected error occurred during item update.", ex);
+                _logger.LogError("Unexpected error occurred during item update.{0}", ex);
                 throw;
             }
         }
@@ -100,7 +100,7 @@ namespace Server.Controllers
         {
             try
             {
-                _logger.LogInformation("Creating a new item. Request details: {JsonConvert.SerializeObject(item)}");
+                _logger.LogInformation($"Creating a new item. Request details: {JsonConvert.SerializeObject(item)}");
 
                 _logger.LogInformation($"Item details: {JsonConvert.SerializeObject(item)}");
 
@@ -126,7 +126,7 @@ namespace Server.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError("Unexpected error occurred during item creation.", ex);
+                _logger.LogError("Unexpected error occurred during item creation.{0}", ex);
                 throw;
             }
         }

@@ -2,7 +2,7 @@
 {
     public interface IRabbitMQHandler
     {
-        Task<string?> GetItemFromInventoryAsync();
-        Task AddProductToInventoryAsync(string product);
+        string? GetItemFromInventory();
+        void AddProductToInventory(string product);
     }
 }

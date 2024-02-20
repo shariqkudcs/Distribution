@@ -4,7 +4,6 @@ using Newtonsoft.Json;
 using Server.HubConfig;
 using Server.Models;
 using Server.Services;
-using System.Text.Json;
 
 namespace Server.Controllers
 {
@@ -32,7 +31,7 @@ namespace Server.Controllers
         /// <param name="product"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] Product product)
+        public IActionResult Post([FromBody] Product product)
         {
             try
             {
@@ -40,7 +39,7 @@ namespace Server.Controllers
 
                 _logger.LogInformation($"Adding product to inventory: {JsonConvert.SerializeObject(product)}");
 
-                await _mQHandler.AddProductToInventoryAsync(JsonConvert.SerializeObject(product));
+                _mQHandler.AddProductToInventory(JsonConvert.SerializeObject(product));
 
                 _logger.LogInformation($"Product queued to add into inventory successfully.");
 

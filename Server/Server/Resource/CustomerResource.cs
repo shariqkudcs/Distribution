@@ -7,8 +7,8 @@
     public class CustomerResource
     {
         public int Id { get; set; }
-        public int CDId { get; set; }
-        public int CWId { get; set; }
+        public int CDId { get; set; }//TODO: Unchecked in schema relationship
+        public int CWId { get; set; }//TODO: Unchecked in schema relationship
         public string? First { get; set; }
         public string? Middle { get; set; }
         public string? Last { get; set; }

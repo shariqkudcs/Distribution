@@ -40,7 +40,7 @@ namespace Server.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError("Unexpected error occurred while retrieving districts.", ex);
+                _logger.LogError("Unexpected error occurred while retrieving districts.{0}", ex);
                 throw;
             }
         }
@@ -105,14 +105,14 @@ namespace Server.Controllers
                     }
                     else
                     {
-                        _logger.LogError("Unexpected error occurred during district update.", ex);
+                        _logger.LogError("Unexpected error occurred during district update.{0}", ex);
                         throw;
                     }
                 }
             }
             catch (Exception ex)
             {
-                _logger.LogError("Unexpected error occurred during district update.", ex);
+                _logger.LogError("Unexpected error occurred during district update.{0}", ex);
                 throw;
             }
         }
@@ -122,7 +122,7 @@ namespace Server.Controllers
         {
             try
             {
-                _logger.LogInformation("Creating a new district. Request details: {JsonConvert.SerializeObject(district)}");
+                _logger.LogInformation($"Creating a new district. Request details: {JsonConvert.SerializeObject(district)}");
 
                 _logger.LogInformation($"District details: {JsonConvert.SerializeObject(district)}");
 
@@ -148,7 +148,7 @@ namespace Server.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError("Unexpected error occurred during district creation.", ex);
+                _logger.LogError("Unexpected error occurred during district creation.{0}", ex);
                 throw;
             }
         }
