@@ -24,7 +24,7 @@ namespace Server.Services
             {
                 try
                 {
-                    var rcv = await _rabbitMQHandler.GetItemFromInventoryAsync();
+                    var rcv = _rabbitMQHandler.GetItemFromInventory();
                     if (!string.IsNullOrEmpty(rcv))
                     {
                         await _hub.Clients.All.SendAsync("inventorydata", JsonSerializer.Deserialize<Product>(rcv));

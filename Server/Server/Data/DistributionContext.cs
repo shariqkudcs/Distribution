@@ -22,6 +22,8 @@ public partial class DistributionContext : DbContext
 
     public virtual DbSet<Item> Items { get; set; }
 
+    public virtual DbSet<NewOrder> NewOrders { get; set; }
+
     public virtual DbSet<Order> Orders { get; set; }
 
     public virtual DbSet<OrderLine> OrderLines { get; set; }
@@ -34,41 +36,32 @@ public partial class DistributionContext : DbContext
     {
         modelBuilder.Entity<Customer>(entity =>
         {
-            entity.HasKey(e => new { e.Id, e.CDId, e.CWId }).HasName("PK__Customer__A09CB3E7D42B674D");
+            entity.HasKey(e => e.Id).HasName("PK__Customer__3214EC2709A51412");
         });
 
         modelBuilder.Entity<District>(entity =>
         {
-            entity.HasKey(e => new { e.Id, e.DWId }).HasName("PK__District__BC051354916CDFA6");
+            entity.Property(e => e.Id).ValueGeneratedOnAdd();
         });
 
         modelBuilder.Entity<Item>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Item__3214EC279633E31A");
-
-            entity.Property(e => e.Id).ValueGeneratedNever();
-        });
-
-        modelBuilder.Entity<Order>(entity =>
-        {
-            entity.HasKey(e => new { e.Id, e.ODId, e.OWId }).HasName("PK__Orders__091E646BC15ABCDE");
+            entity.HasKey(e => e.Id).HasName("PK__Item__3214EC2775021ED2");
         });
 
         modelBuilder.Entity<OrderLine>(entity =>
         {
-            entity.HasKey(e => new { e.OlOId, e.OlDId, e.OlWId, e.Id }).HasName("PK__OrderLin__3EB5ED59703B11A6");
+            entity.Property(e => e.Id).ValueGeneratedOnAdd();
         });
 
         modelBuilder.Entity<Stock>(entity =>
         {
-            entity.HasKey(e => new { e.SIId, e.SWId }).HasName("PK__Stock__10458B5F8B8FE728");
+            entity.Property(e => e.Id).ValueGeneratedOnAdd();
         });
 
         modelBuilder.Entity<Warehouse>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Warehous__3214EC272C30307D");
-
-            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.HasKey(e => e.Id).HasName("PK__Warehous__3214EC27182B2DA5");
         });
 
         OnModelCreatingPartial(modelBuilder);

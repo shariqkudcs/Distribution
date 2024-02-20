@@ -7,6 +7,7 @@
     public class DistrictResource
     {
         public int Id { get; set; }
+        public int DId { get; set; }
         public int DWId { get; set; }
         public string? Name { get; set; }
         public string? Street1 { get; set; }

@@ -40,7 +40,7 @@ namespace Server.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError("Unexpected error occurred while retrieving customers.", ex);
+                _logger.LogError("Unexpected error occurred while retrieving customers.{0}", ex);
                 throw;
             }
         }
@@ -105,14 +105,14 @@ namespace Server.Controllers
                     }
                     else
                     {
-                        _logger.LogError("Unexpected error occurred during customer update.", ex);
+                        _logger.LogError("Unexpected error occurred during customer update.{0}", ex);
                         throw;
                     }
                 }
             }
             catch (Exception ex)
             {
-                _logger.LogError("Unexpected error occurred during customer update.", ex);
+                _logger.LogError("Unexpected error occurred during customer update.{0}", ex);
                 throw;
             }
         }
@@ -122,7 +122,7 @@ namespace Server.Controllers
         {
             try
             {
-                _logger.LogInformation("Creating a new customer. Request details: {JsonConvert.SerializeObject(customer)}");
+                _logger.LogInformation($"Creating a new customer. Request details: {JsonConvert.SerializeObject(customer)}");
 
                 _logger.LogInformation($"Customer details: {JsonConvert.SerializeObject(customer)}");
 
@@ -148,7 +148,7 @@ namespace Server.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError("Unexpected error occurred during customer creation.", ex);
+                _logger.LogError($"Unexpected error occurred during customer creation.{0}", ex);
                 throw;
             }
         }

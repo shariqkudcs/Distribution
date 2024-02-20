@@ -40,7 +40,7 @@ namespace Server.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError("Unexpected error occurred while retrieving orders.", ex);
+                _logger.LogError("Unexpected error occurred while retrieving orders.{0}", ex);
                 throw;
             }
         }
@@ -103,7 +103,7 @@ namespace Server.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError("Unexpected error occurred during order creation.", ex);
+                _logger.LogError("Unexpected error occurred during order creation.{0}", ex);
                 throw;
             }
         }

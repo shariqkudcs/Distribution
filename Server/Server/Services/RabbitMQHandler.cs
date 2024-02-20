@@ -23,7 +23,7 @@ namespace Server.Services
             _logger = logger;
         }
 
-        public async Task<string?> GetItemFromInventoryAsync()
+        public string? GetItemFromInventory()
         {
             try
             {
@@ -37,7 +37,7 @@ namespace Server.Services
             }
         }
 
-        public async Task AddProductToInventoryAsync(string product)
+        public void AddProductToInventory(string product)
         {
             try
             {
