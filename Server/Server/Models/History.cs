@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
@@ -32,4 +34,7 @@ public partial class History
     [Column("DATA")]
     [StringLength(24)]
     public string? Data { get; set; }
+
+    [ForeignKey("HCId")]
+    public virtual Customer? HC { get; set; }
 }

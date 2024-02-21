@@ -33,9 +33,10 @@ namespace Server.Controllers
         [HttpPost]
         public IActionResult Post([FromBody] Product product)
         {
+            _logger.LogInformation($"Received POST request to add product to inventory. Request details: {JsonConvert.SerializeObject(product)}");
+
             try
             {
-                _logger.LogInformation($"Received POST request to add product to inventory. Request details: {JsonConvert.SerializeObject(product)}");
 
                 _logger.LogInformation($"Adding product to inventory: {JsonConvert.SerializeObject(product)}");
 

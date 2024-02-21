@@ -1,13 +1,16 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
 namespace Server.Models;
 
-[Keyless]
 [Table("District")]
+[Index("DId", "DWId", Name = "D_ID_D_W_ID", IsUnique = true)]
 public partial class District
 {
+    [Key]
     [Column("ID")]
     public int Id { get; set; }
 
@@ -49,4 +52,11 @@ public partial class District
 
     [Column("NEXT_O_ID")]
     public int? NextOId { get; set; }
+
+    [InverseProperty("District")]
+    public virtual ICollection<Customer> Customers { get; set; } = new List<Customer>();
+
+    [ForeignKey("DWId")]
+    [InverseProperty("Districts")]
+    public virtual Warehouse DW { get; set; } = null!;
 }

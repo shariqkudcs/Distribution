@@ -53,16 +53,16 @@ namespace Server.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutItem(int id, ItemResource item)
         {
+            _logger.LogInformation($"Updating item with ID {id}. Request details: {JsonConvert.SerializeObject(item)}");
+
+            if (id != item.Id)
+            {
+                _logger.LogError("Bad request: ID in the URL does not match the ID in the request body.");
+                return BadRequest();
+            }
+
             try
             {
-                _logger.LogInformation($"Updating item with ID {id}. Request details: {JsonConvert.SerializeObject(item)}");
-
-                if (id != item.Id)
-                {
-                    _logger.LogError("Bad request: ID in the URL does not match the ID in the request body.");
-                    return BadRequest();
-                }
-
                 _context.Entry(_mapper.Map<ItemResource, Item>(item)).State = EntityState.Modified;
 
                 try
@@ -98,20 +98,21 @@ namespace Server.Controllers
         [HttpPost]
         public async Task<ActionResult<ItemResource>> PostItem(ItemResource item)
         {
+            _logger.LogInformation($"Received POST request to add item. Request details: {JsonConvert.SerializeObject(item)}");
+
+            var saveEntity = _mapper.Map<ItemResource, Item>(item);
+            _context.Items.Add(saveEntity);
             try
             {
-                _logger.LogInformation($"Creating a new item. Request details: {JsonConvert.SerializeObject(item)}");
+                _logger.LogInformation("Creating a new item.");
 
-                _logger.LogInformation($"Item details: {JsonConvert.SerializeObject(item)}");
-
-                _context.Items.Add(_mapper.Map<ItemResource, Item>(item));
                 await _context.SaveChangesAsync();
+                item.Id = saveEntity.Id;
 
                 _logger.LogInformation($"Item with ID {item.Id} created successfully.");
 
-                return CreatedAtAction("GetItem", new { id = item.Id }, item);
             }
-            catch (DbUpdateException)
+            catch (DbUpdateException ex)
             {
                 if (ItemExists(item.Id))
                 {
@@ -120,15 +121,17 @@ namespace Server.Controllers
                 }
                 else
                 {
-                    _logger.LogError("Unexpected error occurred during item creation.");
+                    _logger.LogError($"Unexpected error occurred during item creation : {ex}");
                     throw;
                 }
             }
             catch (Exception ex)
             {
-                _logger.LogError("Unexpected error occurred during item creation.{0}", ex);
+                _logger.LogError($"Unexpected error occurred during item creation : {ex}");
                 throw;
             }
+
+            return CreatedAtAction("GetItem", new { id = saveEntity.Id }, item);
         }
 
         [HttpDelete("{id}")]

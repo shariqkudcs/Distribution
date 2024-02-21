@@ -1,5 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
 namespace Server.Models;
 
@@ -79,4 +82,11 @@ public partial class Customer
 
     [Column("DATA")]
     public string? Data { get; set; }
+
+    [ForeignKey("CDId, CWId")]
+    [InverseProperty("Customers")]
+    public virtual District District { get; set; } = null!;
+
+    [InverseProperty("OC")]
+    public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
 }

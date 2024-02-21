@@ -75,16 +75,16 @@ namespace Server.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCustomer(int id, CustomerResource customer)
         {
+            _logger.LogInformation($"Updating customer with ID {id}. Request details: {JsonConvert.SerializeObject(customer)}");
+
+            if (id != customer.Id)
+            {
+                _logger.LogError("Bad request: ID in the URL does not match the ID in the request body.");
+                return BadRequest();
+            }
+
             try
             {
-                _logger.LogInformation($"Updating customer with ID {id}. Request details: {JsonConvert.SerializeObject(customer)}");
-
-                if (id != customer.Id)
-                {
-                    _logger.LogError("Bad request: ID in the URL does not match the ID in the request body.");
-                    return BadRequest();
-                }
-
                 _context.Entry(_mapper.Map<CustomerResource, Customer>(customer)).State = EntityState.Modified;
 
                 try
@@ -120,20 +120,22 @@ namespace Server.Controllers
         [HttpPost]
         public async Task<ActionResult<Customer>> PostCustomer(CustomerResource customer)
         {
+            _logger.LogInformation($"Received POST request to add customer. Request details: {JsonConvert.SerializeObject(customer)}");
+
+            var saveEntity = _mapper.Map<CustomerResource, Customer>(customer);
+            _context.Customers.Add(saveEntity);
+
             try
             {
-                _logger.LogInformation($"Creating a new customer. Request details: {JsonConvert.SerializeObject(customer)}");
+                _logger.LogInformation("Creating a new Customer.");
 
-                _logger.LogInformation($"Customer details: {JsonConvert.SerializeObject(customer)}");
-
-                _context.Customers.Add(_mapper.Map<CustomerResource, Customer>(customer));
                 await _context.SaveChangesAsync();
+                customer.Id = saveEntity.Id;
 
                 _logger.LogInformation($"Customer with ID {customer.Id} created successfully.");
 
-                return CreatedAtAction("GetCustomer", new { id = customer.Id }, customer);
             }
-            catch (DbUpdateException)
+            catch (DbUpdateException ex)
             {
                 if (CustomerExists(customer.Id))
                 {
@@ -142,46 +144,17 @@ namespace Server.Controllers
                 }
                 else
                 {
-                    _logger.LogError("Unexpected error occurred during customer creation.");
+                    _logger.LogError($"Unexpected error occurred during customer creation : {ex}");
                     throw;
                 }
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Unexpected error occurred during customer creation.{0}", ex);
+                _logger.LogError($"Unexpected error occurred during customer creation : {ex}");
                 throw;
             }
-        }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCustomer(int id)
-        {
-            try
-            {
-                _logger.LogInformation($"Deleting customer with ID {id}");
-
-                var customer = await _context.Customers.FindAsync(id);
-
-                if (customer == null)
-                {
-                    _logger.LogWarning($"Customer with ID {id} not found for deletion.");
-                    return NotFound();
-                }
-
-                _logger.LogInformation($"Customer details before deletion: {JsonConvert.SerializeObject(customer)}");
-
-                _context.Customers.Remove(customer);
-                await _context.SaveChangesAsync();
-
-                _logger.LogInformation($"Customer with ID {id} deleted successfully.");
-
-                return NoContent();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Unexpected error occurred during customer deletion with ID {id}.", ex);
-                throw;
-            }
+            return CreatedAtAction("GetCustomer", new { id = saveEntity.Id }, customer);
         }
 
         private bool CustomerExists(int id)

@@ -18,4 +18,7 @@ public partial class NewOrder
 
     [Column("NO_W_ID")]
     public int? NoWId { get; set; }
+
+    [ForeignKey("Id")]
+    public virtual Order IdNavigation { get; set; } = null!;
 }

@@ -75,16 +75,16 @@ namespace Server.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutWarehouse(int id, WarehouseResource warehouse)
         {
+            _logger.LogInformation($"Updating warehouse with ID {id}. Request details: {JsonConvert.SerializeObject(warehouse)}");
+
+            if (id != warehouse.Id)
+            {
+                _logger.LogError("Bad request: ID in the URL does not match the ID in the request body.");
+                return BadRequest();
+            }
+
             try
             {
-                _logger.LogInformation($"Updating warehouse with ID {id}. Request details: {JsonConvert.SerializeObject(warehouse)}");
-
-                if (id != warehouse.Id)
-                {
-                    _logger.LogError("Bad request: ID in the URL does not match the ID in the request body.");
-                    return BadRequest();
-                }
-
                 _context.Entry(_mapper.Map<WarehouseResource, Warehouse>(warehouse)).State = EntityState.Modified;
 
                 try
@@ -96,7 +96,7 @@ namespace Server.Controllers
                 }
                 catch (DbUpdateConcurrencyException ex)
                 {
-                    _logger.LogError($"Concurrency exception while updating warehouse with ID {id}.", ex);
+                    _logger.LogError($"Concurrency exception while updating warehouse with ID : {id} {ex}");
 
                     if (!WarehouseExists(id))
                     {
@@ -105,14 +105,14 @@ namespace Server.Controllers
                     }
                     else
                     {
-                        _logger.LogError("Unexpected error occurred during warehouse update.{0}", ex);
+                        _logger.LogError($"Unexpected error occurred during warehouse update : {ex}");
                         throw;
                     }
                 }
             }
             catch (Exception ex)
             {
-                _logger.LogError("Unexpected error occurred during warehouse update.{0}", ex);
+                _logger.LogError($"Unexpected error occurred during warehouse update :{ex}");
                 throw;
             }
         }
@@ -120,11 +120,16 @@ namespace Server.Controllers
         [HttpPost]
         public async Task<ActionResult<WarehouseResource>> PostWarehouse(WarehouseResource warehouse)
         {
+            _logger.LogInformation($"Received POST request to add warehouse. Request details: {JsonConvert.SerializeObject(warehouse)}");
 
-            _context.Warehouses.Add(_mapper.Map<WarehouseResource, Warehouse>(warehouse));
+            var saveEntity = _mapper.Map<WarehouseResource, Warehouse>(warehouse);
+            _context.Warehouses.Add(saveEntity);
             try
             {
+                _logger.LogInformation("Creating a new Warehouse.");
+
                 await _context.SaveChangesAsync();
+                warehouse.Id = saveEntity.Id;
                 _logger.LogInformation($"Warehouse with ID {warehouse.Id} created successfully.");
             }
             catch (DbUpdateException ex)
@@ -142,37 +147,13 @@ namespace Server.Controllers
                     throw;
                 }
             }
-
-            return CreatedAtAction("GetWarehouse", new { id = warehouse.Id }, warehouse);
-        }
-
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteWarehouse(int id)
-        {
-            try
-            {
-                _logger.LogInformation($"Deleting warehouse with ID {id}");
-
-                var warehouse = await _context.Warehouses.FindAsync(id);
-                if (warehouse == null)
-                {
-                    _logger.LogWarning($"Warehouse with ID {id} not found for deletion.");
-                    return NotFound();
-                }
-
-                _logger.LogInformation($"Warehouse details before deletion: {JsonConvert.SerializeObject(warehouse)}");
-
-                _context.Warehouses.Remove(warehouse);
-                await _context.SaveChangesAsync();
-
-                _logger.LogInformation($"Warehouse with ID {id} deleted successfully.");
-                return NoContent();
-            }
             catch (Exception ex)
             {
-                _logger.LogError("Unexpected error occurred during warehouse deletion.{0}", ex);
+                _logger.LogError($"Unexpected error occurred during order creation : {ex}");
                 throw;
             }
+
+            return CreatedAtAction("GetWarehouse", new { id = saveEntity.Id }, warehouse);
         }
 
         private bool WarehouseExists(int id)

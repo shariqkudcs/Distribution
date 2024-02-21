@@ -1,5 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
 namespace Server.Models;
 
@@ -19,4 +22,7 @@ public partial class Item
 
     [Column("DATA")]
     public string? Data { get; set; }
+
+    [InverseProperty("SI")]
+    public virtual ICollection<Stock> Stocks { get; set; } = new List<Stock>();
 }

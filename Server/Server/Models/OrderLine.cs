@@ -1,13 +1,15 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
 namespace Server.Models;
 
-[Keyless]
 [Table("OrderLine")]
 public partial class OrderLine
 {
+    [Key]
     [Column("ID")]
     public int Id { get; set; }
 
@@ -41,4 +43,12 @@ public partial class OrderLine
     [Column("DIST_INFO")]
     [StringLength(24)]
     public string? DistInfo { get; set; }
+
+    [ForeignKey("OlOId")]
+    [InverseProperty("OrderLines")]
+    public virtual Order OlO { get; set; } = null!;
+
+    [ForeignKey("OlIId, OlWId")]
+    [InverseProperty("OrderLines")]
+    public virtual Stock? Stock { get; set; }
 }

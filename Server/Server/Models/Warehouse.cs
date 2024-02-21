@@ -1,5 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
 namespace Server.Models;
 
@@ -39,4 +42,10 @@ public partial class Warehouse
 
     [Column("YTD")]
     public double? Ytd { get; set; }
+
+    [InverseProperty("DW")]
+    public virtual ICollection<District> Districts { get; set; } = new List<District>();
+
+    [InverseProperty("SW")]
+    public virtual ICollection<Stock> Stocks { get; set; } = new List<Stock>();
 }

@@ -14,7 +14,7 @@ Before running the project, ensure you have the following prerequisites installe
 - Node.js and npm (for Angular)
 - .NET Core SDK
 - RabbitMQ Server
-- SQL Server Server
+- SQL Server
 
 ## Project Structure
 

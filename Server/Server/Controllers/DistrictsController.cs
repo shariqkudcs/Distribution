@@ -75,15 +75,16 @@ namespace Server.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutDistrict(int id, DistrictResource district)
         {
+            _logger.LogInformation($"Updating district with ID {id}. Request details: {JsonConvert.SerializeObject(district)}");
+
+            if (id != district.Id)
+            {
+                _logger.LogError("Bad request: ID in the URL does not match the ID in the request body.");
+                return BadRequest();
+            }
+
             try
             {
-                _logger.LogInformation($"Updating district with ID {id}. Request details: {JsonConvert.SerializeObject(district)}");
-
-                if (id != district.Id)
-                {
-                    _logger.LogError("Bad request: ID in the URL does not match the ID in the request body.");
-                    return BadRequest();
-                }
 
                 _context.Entry(_mapper.Map<DistrictResource, District>(district)).State = EntityState.Modified;
 
@@ -120,20 +121,24 @@ namespace Server.Controllers
         [HttpPost]
         public async Task<ActionResult<DistrictResource>> PostDistrict(DistrictResource district)
         {
+            _logger.LogInformation($"Received POST request to add district. Request details: {JsonConvert.SerializeObject(district)}");
+
+            var saveEntity = _mapper.Map<DistrictResource, District>(district);
+            _context.Districts.Add(saveEntity);
+
             try
             {
-                _logger.LogInformation($"Creating a new district. Request details: {JsonConvert.SerializeObject(district)}");
 
-                _logger.LogInformation($"District details: {JsonConvert.SerializeObject(district)}");
+                _logger.LogInformation("Creating a new District.");
 
-                _context.Districts.Add(_mapper.Map<DistrictResource, District>(district));
                 await _context.SaveChangesAsync();
+                district.Id = saveEntity.Id;
 
                 _logger.LogInformation($"District with ID {district.Id} created successfully.");
 
-                return CreatedAtAction("GetDistrict", new { id = district.Id }, district);
+               
             }
-            catch (DbUpdateException)
+            catch (DbUpdateException ex)
             {
                 if (DistrictExists(district.Id))
                 {
@@ -142,15 +147,17 @@ namespace Server.Controllers
                 }
                 else
                 {
-                    _logger.LogError("Unexpected error occurred during district creation.");
+                    _logger.LogError($"Unexpected error occurred during district creation : {ex}");
                     throw;
                 }
             }
             catch (Exception ex)
             {
-                _logger.LogError("Unexpected error occurred during district creation.{0}", ex);
+                _logger.LogError($"Unexpected error occurred during district creation : {ex}");
                 throw;
             }
+
+            return CreatedAtAction("GetDistrict", new { id = saveEntity.Id }, district);
         }
 
         [HttpDelete("{id}")]

@@ -1,0 +1,553 @@
+{
+	"info": {
+		"_postman_id": "f059d3be-e312-40b2-b22b-a02f47647033",
+		"name": "Distribution REST API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "14508860"
+	},
+	"item": [
+		{
+			"name": "Warehouse",
+			"item": [
+				{
+					"name": "Get Warehouse by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{DistributionAPI_URL}}api/Warehouses/1",
+							"host": [
+								"{{DistributionAPI_URL}}api"
+							],
+							"path": [
+								"Warehouses",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create a New Warehouse",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"Warehouse_CA\",\r\n  \"street1\": \"Street_CA\",\r\n  \"street2\": null,\r\n  \"city\": \"City_CA\",\r\n  \"state\": \"CA\",\r\n  \"zip\": \"12345\",\r\n  \"wTax\": 0.15,\r\n  \"ytd\": 100000\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{DistributionAPI_URL}}api/Warehouses",
+							"host": [
+								"{{DistributionAPI_URL}}api"
+							],
+							"path": [
+								"Warehouses"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Warehouse",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": 1,\r\n  \"name\": \"Warehouse_CA\",\r\n  \"street1\": \"Street_CA\",\r\n  \"street2\": null,\r\n  \"city\": \"City_CA\",\r\n  \"state\": \"CA\",\r\n  \"zip\": \"12345\",\r\n  \"wTax\": 0.15,\r\n  \"ytd\": 100000\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{DistributionAPI_URL}}api/Warehouses/1",
+							"host": [
+								"{{DistributionAPI_URL}}api"
+							],
+							"path": [
+								"Warehouses",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Customer",
+			"item": [
+				{
+					"name": "Get Customer by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{DistributionAPI_URL}}api/Customers/1",
+							"host": [
+								"{{DistributionAPI_URL}}api"
+							],
+							"path": [
+								"Customers",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create a New Customer",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"cdId\": 2,\r\n    \"cwId\": 2,\r\n    \"first\": \"First_1\",\r\n    \"middle\": \"M\",\r\n    \"last\": \"Last_1\",\r\n    \"street1\": \"Street_1\",\r\n    \"street2\": null,\r\n    \"city\": \"City_1\",\r\n    \"state\": \"CA\",\r\n    \"zip\": \"12341\",\r\n    \"phone\": \"1234567890\",\r\n    \"since\": \"2024-02-18T21:59:10.613\",\r\n    \"credit\": \"GC\",\r\n    \"creditLim\": 50000,\r\n    \"discount\": 0.05,\r\n    \"balance\": 0,\r\n    \"ytdPayment\": 0,\r\n    \"paymentCnt\": 1,\r\n    \"deliveryCnt\": 0,\r\n    \"data\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{DistributionAPI_URL}}api/Customers",
+							"host": [
+								"{{DistributionAPI_URL}}api"
+							],
+							"path": [
+								"Customers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Customer",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 1,\r\n    \"cdId\": 2,\r\n    \"cwId\": 2,\r\n    \"first\": \"First_1\",\r\n    \"middle\": \"M\",\r\n    \"last\": \"Last_1\",\r\n    \"street1\": \"Street_1\",\r\n    \"street2\": null,\r\n    \"city\": \"City_1\",\r\n    \"state\": \"CA\",\r\n    \"zip\": \"12341\",\r\n    \"phone\": \"1234567890\",\r\n    \"since\": \"2024-02-18T21:59:10.613\",\r\n    \"credit\": \"GC\",\r\n    \"creditLim\": 50000,\r\n    \"discount\": 0.05,\r\n    \"balance\": 0,\r\n    \"ytdPayment\": 0,\r\n    \"paymentCnt\": 1,\r\n    \"deliveryCnt\": 0,\r\n    \"data\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{DistributionAPI_URL}}api/Customers/1",
+							"host": [
+								"{{DistributionAPI_URL}}api"
+							],
+							"path": [
+								"Customers",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "OrderLines",
+			"item": [
+				{
+					"name": "Get OrderLine by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{DistributionAPI_URL}}api/OrderLines/1",
+							"host": [
+								"{{DistributionAPI_URL}}api"
+							],
+							"path": [
+								"OrderLines",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create a New OrderLine",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"olOId\": 1,\r\n    \"olDId\": 2,\r\n    \"olWId\": 2,\r\n    \"olId\": 3,\r\n    \"olIId\": 3,\r\n    \"olSupplyWId\": 3,\r\n    \"deliveryD\": \"2024-02-19T19:28:18.61\",\r\n    \"quantity\": 1,\r\n    \"amount\": 50,\r\n    \"distInfo\": \"Dist_Info_2\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{DistributionAPI_URL}}api/OrderLines",
+							"host": [
+								"{{DistributionAPI_URL}}api"
+							],
+							"path": [
+								"OrderLines"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete OrderLine",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{DistributionAPI_URL}}api/OrderLines/21084",
+							"host": [
+								"{{DistributionAPI_URL}}api"
+							],
+							"path": [
+								"OrderLines",
+								"21084"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update OrderLine",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 1,\r\n    \"olOId\": 1,\r\n    \"olDId\": 2,\r\n    \"olWId\": 2,\r\n    \"olId\": 3,\r\n    \"olIId\": 3,\r\n    \"olSupplyWId\": 3,\r\n    \"deliveryD\": \"2024-02-19T19:28:18.61\",\r\n    \"quantity\": 1,\r\n    \"amount\": 50,\r\n    \"distInfo\": \"Dist_Info_2\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{DistributionAPI_URL}}api/OrderLines/1",
+							"host": [
+								"{{DistributionAPI_URL}}api"
+							],
+							"path": [
+								"OrderLines",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Stocks",
+			"item": [
+				{
+					"name": "Get Stocks by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{DistributionAPI_URL}}api/Stocks/2",
+							"host": [
+								"{{DistributionAPI_URL}}api"
+							],
+							"path": [
+								"Stocks",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create a New Stock",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"siId\": 1,\r\n    \"swId\": 1,\r\n    \"sQuantity\": 85,\r\n    \"sDist01\": \"Dist_01\",\r\n    \"sYtd\": 0,\r\n    \"sOrderCnt\": 0,\r\n    \"sRemoteCnt\": 0,\r\n    \"sData\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{DistributionAPI_URL}}api/Stocks",
+							"host": [
+								"{{DistributionAPI_URL}}api"
+							],
+							"path": [
+								"Stocks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Stock",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{DistributionAPI_URL}}api/Stocks/1",
+							"host": [
+								"{{DistributionAPI_URL}}api"
+							],
+							"path": [
+								"Stocks",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Stock",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 2,\r\n    \"siId\": 1,\r\n    \"swId\": 2,\r\n    \"sQuantity\": 25,\r\n    \"sDist01\": \"Dist_01\",\r\n    \"sYtd\": 0,\r\n    \"sOrderCnt\": 0,\r\n    \"sRemoteCnt\": 0,\r\n    \"sData\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{DistributionAPI_URL}}api/Stocks/2",
+							"host": [
+								"{{DistributionAPI_URL}}api"
+							],
+							"path": [
+								"Stocks",
+								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Items",
+			"item": [
+				{
+					"name": "Get Item by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{DistributionAPI_URL}}api/Items/1",
+							"host": [
+								"{{DistributionAPI_URL}}api"
+							],
+							"path": [
+								"Items",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create a New Item",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Item_1\",\r\n    \"price\": 87.23406493945377,\r\n    \"data\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{DistributionAPI_URL}}api/Items",
+							"host": [
+								"{{DistributionAPI_URL}}api"
+							],
+							"path": [
+								"Items"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Item",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{DistributionAPI_URL}}api/Items/100001",
+							"host": [
+								"{{DistributionAPI_URL}}api"
+							],
+							"path": [
+								"Items",
+								"100001"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Item",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 1,\r\n    \"name\": \"Item_1\",\r\n    \"price\": 87.23406493945377,\r\n    \"data\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{DistributionAPI_URL}}api/Items/1",
+							"host": [
+								"{{DistributionAPI_URL}}api"
+							],
+							"path": [
+								"Items",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Orders",
+			"item": [
+				{
+					"name": "Get Order by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{DistributionAPI_URL}}api/Orders/1",
+							"host": [
+								"{{DistributionAPI_URL}}api"
+							],
+							"path": [
+								"Orders",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create a New Order",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"odId\": 2,\r\n    \"owId\": 2,\r\n    \"ocId\": 1,\r\n    \"oEntryD\": \"2024-02-18T22:00:28.93\",\r\n    \"oCarrierId\": 1,\r\n    \"oOlCnt\": 10,\r\n    \"oAllLocal\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{DistributionAPI_URL}}api/Orders",
+							"host": [
+								"{{DistributionAPI_URL}}api"
+							],
+							"path": [
+								"Orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Order",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 1,\r\n    \"odId\": 2,\r\n    \"owId\": 2,\r\n    \"ocId\": 1,\r\n    \"oEntryD\": \"2024-02-18T22:00:28.93\",\r\n    \"oCarrierId\": 1,\r\n    \"oOlCnt\": 10,\r\n    \"oAllLocal\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{DistributionAPI_URL}}api/Orders/1",
+							"host": [
+								"{{DistributionAPI_URL}}api"
+							],
+							"path": [
+								"Orders",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "DistributionAPI_URL",
+			"value": "http://localhost:5263/"
+		}
+	]
+}

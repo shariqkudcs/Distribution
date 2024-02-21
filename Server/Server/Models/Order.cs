@@ -1,6 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-
+using Microsoft.EntityFrameworkCore;
 
 namespace Server.Models;
 
@@ -30,4 +32,11 @@ public partial class Order
 
     [Column("O_ALL_LOCAL")]
     public int? OAllLocal { get; set; }
+
+    [ForeignKey("OCId")]
+    [InverseProperty("Orders")]
+    public virtual Customer? OC { get; set; }
+
+    [InverseProperty("OlO")]
+    public virtual ICollection<OrderLine> OrderLines { get; set; } = new List<OrderLine>();
 }

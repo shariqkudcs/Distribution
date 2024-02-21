@@ -1,13 +1,16 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
 namespace Server.Models;
 
-[Keyless]
 [Table("Stock")]
+[Index("SIId", "SWId", Name = "S_I_ID_S_W_ID", IsUnique = true)]
 public partial class Stock
 {
+    [Key]
     [Column("ID")]
     public int Id { get; set; }
 
@@ -35,4 +38,15 @@ public partial class Stock
 
     [Column("S_DATA")]
     public string? SData { get; set; }
+
+    [InverseProperty("Stock")]
+    public virtual ICollection<OrderLine> OrderLines { get; set; } = new List<OrderLine>();
+
+    [ForeignKey("SIId")]
+    [InverseProperty("Stocks")]
+    public virtual Item SI { get; set; } = null!;
+
+    [ForeignKey("SWId")]
+    [InverseProperty("Stocks")]
+    public virtual Warehouse SW { get; set; } = null!;
 }

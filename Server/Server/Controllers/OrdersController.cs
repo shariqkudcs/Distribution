@@ -72,23 +72,68 @@ namespace Server.Controllers
             }
         }
 
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutOrder(int id, OrderResource order)
+        {
+            _logger.LogInformation($"Received PUT request to update order with ID {id}. Request details: {JsonConvert.SerializeObject(order)}");
+
+            if (id != order.Id)
+            {
+                _logger.LogWarning($"Bad request. ID in the URL ({id}) does not match the ID in the request body ({order.Id}).");
+                return BadRequest();
+            }
+
+            try
+            {
+                _context.Entry(_mapper.Map<OrderResource, Order>(order)).State = EntityState.Modified;
+
+                try
+                {
+                    await _context.SaveChangesAsync();
+
+                    _logger.LogInformation($"Order with ID {id} updated successfully.");
+                }
+                catch (DbUpdateConcurrencyException ex)
+                {
+                    if (!OrderExists(id))
+                    {
+                        _logger.LogInformation($"Order line ID {id} not found.");
+                        return NotFound();
+                    }
+                    else
+                    {
+                        _logger.LogError($"Concurrency exception occurred while updating order with ID {id} : {ex}");
+                        throw;
+                    }
+                }
+
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error occurred while processing PUT request for order with ID {id}: {ex}");
+
+                throw;
+            }
+        }
+
         [HttpPost]
         public async Task<ActionResult<OrderResource>> PostOrder(OrderResource order)
         {
+            _logger.LogInformation($"Received POST request to add order. Request details: {JsonConvert.SerializeObject(order)}");
+
+            var saveEntity = _mapper.Map<OrderResource, Order>(order);
+            _context.Orders.Add(saveEntity);
+
             try
             {
                 _logger.LogInformation("Creating a new order.");
-
-                _logger.LogInformation($"Order details: {JsonConvert.SerializeObject(order)}");
-
-                _context.Orders.Add(_mapper.Map<OrderResource, Order>(order));
                 await _context.SaveChangesAsync();
-
+                order.Id = saveEntity.Id;
                 _logger.LogInformation($"Order with ID {order.Id} created successfully.");
 
-                return CreatedAtAction("GetOrder", new { id = order.Id }, order);
             }
-            catch (DbUpdateException)
+            catch (DbUpdateException ex)
             {
                 if (OrderExists(order.Id))
                 {
@@ -97,46 +142,17 @@ namespace Server.Controllers
                 }
                 else
                 {
-                    _logger.LogError("Unexpected error occurred during order creation.");
+                    _logger.LogError($"Unexpected error occurred during order creation : {ex}");
                     throw;
                 }
             }
             catch (Exception ex)
             {
-                _logger.LogError("Unexpected error occurred during order creation.{0}", ex);
+                _logger.LogError($"Unexpected error occurred during order creation : {ex}");
                 throw;
             }
-        }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteOrder(int id)
-        {
-            try
-            {
-                _logger.LogInformation($"Deleting order with ID {id}");
-
-                var order = await _context.Orders.FindAsync(id);
-
-                if (order == null)
-                {
-                    _logger.LogWarning($"Order with ID {id} not found for deletion.");
-                    return NotFound();
-                }
-
-                _logger.LogInformation($"Order details before deletion: {JsonConvert.SerializeObject(order)}");
-
-                _context.Orders.Remove(order);
-                await _context.SaveChangesAsync();
-
-                _logger.LogInformation($"Order with ID {id} deleted successfully.");
-
-                return NoContent();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Unexpected error occurred during order deletion with ID {id}.", ex);
-                throw;
-            }
+            return CreatedAtAction("GetOrder", new { id = saveEntity.Id }, order);
         }
 
         private bool OrderExists(int id)
